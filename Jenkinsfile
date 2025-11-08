@@ -1,27 +1,26 @@
-
 pipeline {
     agent any
-    def gitUrl = 'https://github.com/aditya-35/docker_hello_java.git'
-    def credentialsId = 'aditya-35' 
-    def dockerImageName = 'my-java-hello-app:latest'
 
     stages {
-        stage('Clone Repository') {
+
+        stage('Build') {
             steps {
-                git url: gitUrl, credentialsId: credentialsId, branch: 'main'
+                sh 'docker build -t my-new-java-app:1.0 .'
+		sh 'docker images'
             }
         }
-        stage('Build and Tag Docker Image') {
+
+        stage('Run') {
             steps {
-                script {
-                    docker.build(dockerImageName)
-                }
-            }
-        }
-        stage('Run Docker Container') {
-            steps {
-                sh "docker run --rm ${dockerImageName}"
+                sh 'docker run -t --name my-new-java-cont my-new-app:1.0'
+		sh 'docker logs my-new-java-cont'
             }
         }
     }
+
+   post {
+	always{
+		echo 'Pipeline Finished.'
+		}
+	}
 }

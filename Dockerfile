@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:21
 WORKDIR /app
 COPY . /app
 RUN javac HelloWorld.java
